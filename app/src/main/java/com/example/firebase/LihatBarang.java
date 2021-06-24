@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +35,27 @@ public class LihatBarang extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance().getReference();
 
-        database.child("Barang").addValueEventListener(new ValueEventListener() { @Override public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-/** * Saat ada data baru, masukkan datanya ke ArrayList */ daftarBarang = new ArrayList<>(); for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) { /** * Mapping data pada DataSnapshot ke dalam object Barang * Dan juga menyimpan primary key pada object Barang * untuk keperluan Edit dan Delete data */ Barang barang = noteDataSnapshot.getValue(Barang.class); barang.setKode(noteDataSnapshot.getKey()); /** * Menambahkan object Barang yang sudah dimapping * ke dalam ArrayList */ daftarBarang.add(barang); } /** * Inisialisasi adapter dan data barang dalam bentuk ArrayList * dan mengeset Adapter ke dalam RecyclerView */
-adapter = new AdapterLihatBarang(daftarBarang, LihatBarang.this); rvView.setAdapter(adapter); } @Override public void onCancelled(@NonNull DatabaseError databaseError) { /** * Kode ini akan dipanggil ketika ada error dan * pengambilan data gagal dan memprint error nya * ke LogCat */ System.out.println(databaseError.getDetails()+" "+databaseError.getMessage()); } }); } public static Intent getActIntent(Activity activity){ return new Intent(activity, LihatBarang.class); } }
+        database.child("Barang").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                daftarBarang = new ArrayList<>();
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    Barang barang = noteDataSnapshot.getValue(Barang.class);
+                    barang.setId(noteDataSnapshot.getKey());
+
+                    daftarBarang.add(barang);
+                }
+                adapter = new AdapterLihatBarang(daftarBarang,LihatBarang.this);
+                rvView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseEror) {
+                System.out.println(databaseEror.getDetails()+""+databaseEror.getMessage());
+            }
+        });
+    }
+    public static Intent getActIntent(Activity activity){
+        return new Intent(activity, LihatBarang.class);
+    }
+}

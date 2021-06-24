@@ -11,8 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Firebase">
+        <activity android:name=".BarangEdit"
+            android:parentActivityName=".LihatBarang"/>
         <activity android:name=".LihatBarang" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".TambahData" android:parentActivityName=".MainActivity"></activity>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
